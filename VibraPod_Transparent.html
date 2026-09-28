@@ -21,11 +21,12 @@
   <!-- CDN-only ES modules. This file can be opened directly in a modern browser. -->
   <!-- The map also lets Three's official add-ons resolve their internal `three` import. -->
   <script type="importmap">
-    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js" } }
+    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.min.js" } }
   </script>
   <script type="module">
-    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js';
+    import * as THREE from 'three';
     import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/controls/OrbitControls.js';
+    import { mergeGeometries } from 'https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/utils/BufferGeometryUtils.js';
     import { RoundedBoxGeometry } from 'https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/geometries/RoundedBoxGeometry.js';
     import { RectAreaLightUniformsLib } from 'https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lights/RectAreaLightUniformsLib.js';
     RectAreaLightUniformsLib.init();
@@ -51,8 +52,6 @@
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.08;
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     document.body.prepend(renderer.domElement);
 
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -90,7 +89,7 @@
       const texture = new THREE.CanvasTexture(canvas);
       texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
       texture.repeat.set(woven ? 10 : 4, woven ? 2 : 2);
-      texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      texture.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
       return texture;
     }
     const grain = surfaceTexture(false), weave = surfaceTexture(true);
@@ -98,16 +97,6 @@
     const fabric = new THREE.MeshStandardMaterial({ color: COLORS.fabric, roughness: 0.94, metalness: 0.0, bumpMap: weave, bumpScale: 0.035 });
     const recess = new THREE.MeshStandardMaterial({ color: COLORS.inset, roughness: 0.83, metalness: 0.0 });
     const ledMaterial = new THREE.MeshStandardMaterial({ color: COLORS.led, emissive: COLORS.led, emissiveIntensity: 1.35, roughness: 0.4 });
-
-    // Soft studio floor and its diffuse contact shadow.
-    const floor = new THREE.Mesh(
-      new THREE.PlaneGeometry(80, 80),
-      new THREE.ShadowMaterial({ color: 0x61706b, opacity: 0.12 })
-    );
-    floor.rotation.x = -Math.PI / 2;
-    floor.position.y = -4.65;
-    floor.receiveShadow = true;
-    scene.add(floor);
 
     // ── Curved neoprene armband ────────────────────────────────────────────
     // A closed, slightly flattened oval tube makes the band clearly read as wearable.
@@ -317,7 +306,7 @@
       return mesh;
     }
     function disc(radius, height, position, material) {
-      const mesh = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius, height, 48), material);
+      const mesh = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius, height, Math.max(16, Math.min(48, Math.round(radius * 70)))), material);
       mesh.position.set(...position);
       inside.add(mesh);
       return mesh;
@@ -398,10 +387,11 @@
     // Color-coded cable routes with shared, explicit endpoint positions.
     // Red = conceptual supply, black = common return, blue = motor control.
     // No charger/regulator is modeled; confirm the exact board's LiPo support.
+    const wireMats = {};
     function wire(points, color, radius = 0.028) {
       const path = new THREE.CatmullRomCurve3(points.map(p => new THREE.Vector3(...p)));
       const mesh = new THREE.Mesh(new THREE.TubeGeometry(path, 48, radius, 8, false),
-        new THREE.MeshStandardMaterial({ color, roughness: 0.64 }));
+        (wireMats[color] ||= new THREE.MeshStandardMaterial({ color, roughness: 0.64 })));
       inside.add(mesh);
       for (const p of [points[0], points[points.length - 1]]) disc(0.052, 0.028, p, metal);
     }
@@ -416,6 +406,25 @@
     // Short leads on the motor module connect the coin motor to its driver.
     wire([[-3.5, 2.18, 0.35], [-3.57, 2.28, 0.63], [-2.4, 2.38, 0.68]], 0xc33936, 0.02);
     wire([[-3.5, 2.18, 0.45], [-3.57, 2.30, 0.78], [-2.4, 2.38, 0.83]], 0x3879bb, 0.02);
+
+    // ── Perf: collapse static meshes sharing a material into one draw call ──
+    product.updateMatrixWorld(true);
+    const toProduct = product.matrixWorld.clone().invert();
+    const buckets = new Map();
+    product.traverse(m => {
+      if (!m.isMesh || !m.visible || m === housing || m === strap || m.material.transparent) return;
+      if (!buckets.has(m.material)) buckets.set(m.material, []);
+      buckets.get(m.material).push(m);
+    });
+    for (const [material, meshes] of buckets) {
+      if (meshes.length < 2) continue;
+      let geos = meshes.map(m => m.geometry.clone().applyMatrix4(toProduct.clone().multiply(m.matrixWorld)));
+      if (!geos.every(g => g.index)) geos = geos.map(g => g.index ? g.toNonIndexed() : g);
+      const merged = mergeGeometries(geos);
+      if (!merged) continue;
+      product.add(new THREE.Mesh(merged, material));
+      meshes.forEach(m => { m.removeFromParent(); m.geometry.dispose(); });
+    }
 
     // Three soft product-photography lights: key, fill, and slim rim.
     const hemi = new THREE.HemisphereLight(0xf8fbfa, 0x7d8583, 1.55);
@@ -439,14 +448,28 @@
     renderer.domElement.addEventListener('wheel', () => { lastInteraction = performance.now(); }, { passive: true });
 
     const clock = new THREE.Clock();
+    let onScreen = true, running = false, frames = 0, slow = 0;
     function animate() {
+      if (!onScreen || document.hidden) { running = false; return; }   // idle when off-screen / tab hidden
       requestAnimationFrame(animate);
-      const dt = Math.min(clock.getDelta(), 0.05);
-      if (!dragging && performance.now() - lastInteraction > resumeDelay) product.rotation.y += dt * 0.19;
+      const raw = clock.getDelta(), dt = Math.min(raw, 0.05);
+      product.rotation.y += dt * 0.19;   // always spinning
       controls.update();
       renderer.render(scene, camera);
+      // Adaptive resolution: steps down only if the device can't hold ~35fps.
+      const pr = renderer.getPixelRatio();
+      if (pr > 1 && raw < 0.25) {
+        if (raw > 0.028) slow++;
+        if (++frames === 45) {
+          if (slow > 27) renderer.setPixelRatio(Math.max(1, pr - 0.5));
+          frames = slow = 0;
+        }
+      }
     }
-    animate();
+    const wake = () => { if (!running && onScreen && !document.hidden) { running = true; clock.getDelta(); requestAnimationFrame(animate); } };
+    new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; wake(); }).observe(renderer.domElement);
+    document.addEventListener('visibilitychange', wake);
+    wake();
 
     addEventListener('resize', () => {
       camera.aspect = innerWidth / innerHeight;
