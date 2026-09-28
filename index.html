@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VibraCoach</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brandbg: '#ecefed', 
+                        ink: '#252729',
+                        accent: '#79db99', 
+                        muted: '#71767a'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        .iframe-container iframe {
+            background-color: #ecefed;
+        }
+    </style>
+</head>
+<body class="bg-brandbg text-ink font-sans antialiased overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav class="w-full py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex justify-between items-center border-b border-gray-300/40">
+        <div class="text-2xl font-bold tracking-tighter flex items-center gap-2">
+            VibraCoach
+        </div>
+        <a href="#journey" class="text-sm font-bold uppercase tracking-widest text-muted hover:text-ink transition-colors">The Prototype</a>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-16 lg:pt-16 lg:pb-20 text-center">
+            
+            <!-- Full Team Kronos Logo -->
+            <div class="flex justify-center mb-10">
+                <img src="kronos-logo.png" alt="Team Kronos" class="h-40 md:h-56 lg:h-64 w-auto object-contain drop-shadow-md">
+            </div>
+            
+            <!-- Redesigned Hackathon Spotlight -->
+            <div class="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 mb-12">
+                <img src="hackathon-logo.png" alt="Oπεν Hackathon Logo" class="h-28 md:h-40 w-auto object-contain shrink-0">
+                <div class="text-center md:text-left">
+                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-ink mb-2">
+                        Oπεν Hackathon 2026
+                    </h2>
+                    <p class="text-xl md:text-2xl lg:text-3xl font-semibold text-[#13428a]">
+                        For Accessibility
+                    </p>
+                </div>
+            </div>
+            
+            <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-8">
+                Building Accessible <br class="hidden md:block" /> Haptic Feedback.
+            </h1>
+            <p class="max-w-2xl mx-auto text-lg md:text-xl text-muted leading-relaxed">
+                VibraCoach started as a vision to create an intuitive wearable system. Powered by the <strong>ESP32-C3</strong> and connected via <strong>BLE</strong>, it delivers distinct physical cues for real-time coaching.
+            </p>
+        </section>
+
+        <!-- Intro / Origin Story -->
+        <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="bg-white/40 backdrop-blur-sm rounded-3xl p-8 md:p-12 shadow-sm border border-gray-200/50">
+                <div class="flex items-center gap-5 mb-6">
+                    <img src="planet.png" alt="Kronos Planet" class="h-16 md:h-20 w-auto object-contain drop-shadow-sm">
+                    <h2 class="text-3xl md:text-4xl font-bold">How It Started</h2>
+                </div>
+                <div class="space-y-6 text-lg text-ink/80 leading-relaxed">
+                    <p>
+                        The idea was born during the <strong>Oπεν Hackathon 2026 for Accessibility</strong>. I teamed up with <a href="https://www.linkedin.com/in/iliadistheo/" target="_blank" class="text-accent font-semibold hover:underline">Theodoris Iliadis</a> to form <strong>Team Kronos</strong> and tackle a unique challenge in the accessibility space. 
+                    </p>
+                    <div class="bg-brandbg p-6 rounded-2xl border border-gray-200 mt-4">
+                        <h3 class="font-bold text-ink mb-2">The Problem We Wanted to Solve:</h3>
+                        <p class="text-muted text-base italic">
+                            [Placeholder: Insert your problem statement here. Explain the specific accessibility gap you noticed and why current solutions weren't enough. Blah blah blah, we'll write this later.]
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Prototype Stages -->
+        <section id="journey" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <h2 class="text-4xl font-bold text-center mb-20">The 3-Day Prototype</h2>
+            
+            <div class="space-y-28">
+                
+                <!-- Day 1 -->
+                <div>
+                    <!-- Editorial Day UI -->
+                    <div class="flex items-center gap-4 mb-6">
+                        <img src="planet.png" alt="Planet Motif" class="w-10 h-10 md:w-12 md:h-12 object-contain">
+                        <h3 class="text-4xl md:text-5xl font-black tracking-tighter text-ink">DAY 1</h3>
+                        <div class="h-1 bg-ink/10 flex-grow ml-2 rounded-full"></div>
+                    </div>
+                    
+                    <h4 class="text-2xl font-bold mb-4">First Hardware & Mobile Sync</h4>
+                    <p class="text-lg text-ink/80 mb-8 max-w-2xl">
+                        We started by getting our hands dirty with the hardware. This was our first time working with the ESP32-C3 SuperMini. We managed to flash our initial C++ firmware to establish a Bluetooth Low Energy (BLE) server. Simultaneously, we scaffolded the companion native Android app using Jetpack Compose to successfully send connection handshakes.
+                    </p>
+                    
+                    <img src="day1-board.jpg" alt="ESP32-C3 Board" class="rounded-2xl shadow-sm border border-gray-200/50 w-full max-w-3xl h-auto">
+                    <p class="text-sm text-ink/70 mt-3 font-medium">ESP32-C3 Board and USB connection setup.</p>
+                </div>
+
+                <!-- Day 2 -->
+                <div>
+                    <!-- Editorial Day UI -->
+                    <div class="flex items-center gap-4 mb-6">
+                        <img src="planet.png" alt="Planet Motif" class="w-10 h-10 md:w-12 md:h-12 object-contain">
+                        <h3 class="text-4xl md:text-5xl font-black tracking-tighter text-ink">DAY 2</h3>
+                        <div class="h-1 bg-ink/10 flex-grow ml-2 rounded-full"></div>
+                    </div>
+
+                    <h4 class="text-2xl font-bold mb-4">Actuation & Non-Blocking Patterns</h4>
+                    <p class="text-lg text-ink/80 mb-8 max-w-2xl">
+                        With communication established, the focus shifted to haptics. We wired up the vibration motor modules. The challenge here was writing non-blocking event handling so the ESP32 could parse incoming BLE commands while simultaneously triggering distinct PWM vibration patterns without freezing the loop.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                        <img src="day2-wiring-1.jpg" alt="Wiring setup angle 1" class="rounded-2xl shadow-sm border border-gray-200/50 w-full h-auto">
+                        <img src="day2-wiring-2.jpg" alt="Wiring setup angle 2" class="rounded-2xl shadow-sm border border-gray-200/50 w-full h-auto">
+                    </div>
+                </div>
+
+                <!-- Day 3 -->
+                <div>
+                    <!-- Editorial Day UI -->
+                    <div class="flex items-center gap-4 mb-6">
+                        <img src="planet.png" alt="Planet Motif" class="w-10 h-10 md:w-12 md:h-12 object-contain">
+                        <h3 class="text-4xl md:text-5xl font-black tracking-tighter text-ink">DAY 3</h3>
+                        <div class="h-1 bg-ink/10 flex-grow ml-2 rounded-full"></div>
+                    </div>
+
+                    <h4 class="text-2xl font-bold mb-4">Enclosure & The Final Pitch</h4>
+                    <p class="text-lg text-ink/80 mb-8 max-w-2xl">
+                        A wearable needs to be worn. On the final day, we moved from breadboards to a compact form factor, 3D printing a custom box to house the battery, board, and motor safely. We integrated everything just in time for the presentation.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                        <img src="day3-pic1.jpg" alt="Enclosure build 1" class="rounded-2xl shadow-sm border border-gray-200/50 w-full h-auto">
+                        <img src="day3-pic2.jpg" alt="Enclosure build 2" class="rounded-2xl shadow-sm border border-gray-200/50 w-full h-auto">
+                        <img src="day3-pic3.jpg" alt="Enclosure build 3" class="rounded-2xl shadow-sm border border-gray-200/50 w-full h-auto">
+                        <img src="day3-pic4.jpg" alt="Enclosure build 4" class="rounded-2xl shadow-sm border border-gray-200/50 w-full h-auto">
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 3D Explorer Section -->
+        <section id="3d-explorer" class="w-full border-t border-gray-300/60 mt-12 pt-16 pb-24 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-12">
+                <h2 class="text-4xl font-bold tracking-tight mb-4">Explore the Hardware</h2>
+                <p class="text-muted">Interact with the digital twin of our final prototype.</p>
+            </div>
+            
+            <div class="max-w-[1400px] mx-auto px-2 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-4 iframe-container">
+                <!-- Normal 3D Model -->
+                <div class="flex flex-col items-center">
+                    <h3 class="text-2xl md:text-3xl font-semibold tracking-tight mb-6">VibraPod</h3>
+                    <!-- Removed overflow-hidden from parent, applied rounded-3xl to iframe -->
+                    <div class="w-full h-[600px] bg-brandbg rounded-3xl shadow-inner border border-white/40">
+                        <iframe 
+                            src="VibraPod.html" 
+                            title="Vibra Pod 3D Viewer" 
+                            class="w-full h-full border-0 rounded-3xl"
+                            scrolling="no">
+                        </iframe>
+                    </div>
+                </div>
+                
+                <!-- Transparent/Interior 3D Model -->
+                <div class="flex flex-col items-center">
+                    <h3 class="text-2xl md:text-3xl font-semibold tracking-tight mb-6">VibraPod Inside</h3>
+                    <!-- Removed overflow-hidden from parent, applied rounded-3xl to iframe -->
+                    <div class="w-full h-[600px] bg-brandbg rounded-3xl shadow-inner border border-white/40">
+                        <iframe 
+                            src="VibraPod_Transparent.html" 
+                            title="Vibra Pod Transparent Viewer" 
+                            class="w-full h-full border-0 rounded-3xl"
+                            scrolling="no">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full py-10 mt-12 border-t border-gray-300/60 bg-[#e0e4e2]/50">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="text-xl font-bold tracking-tighter mb-4 flex items-center justify-center gap-2">
+                VibraCoach
+            </div>
+            <p class="text-sm font-medium text-muted uppercase tracking-wider">
+                Developed by AGGELOS LADAS & THEODORIS ILIADIS &bull; TEAM KRONOS
+            </p>
+            <p class="text-xs text-gray-400 mt-4">
+                &copy; 2026 VibraCoach. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+</body>
+</html>

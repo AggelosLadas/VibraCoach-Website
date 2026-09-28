@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light" />
+  <title>Vibra Pod — interior viewer</title>
+  <style>
+    :root { --ink: #252729; --muted: #71767a; --line: rgba(31, 35, 38, .13); }
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    body { background: #ecefed; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+    .caption { position: fixed; left: clamp(22px, 4vw, 62px); bottom: clamp(22px, 4vw, 50px); pointer-events: none; color: var(--ink); }
+    h1 { margin: 0; font-size: clamp(22px, 2.35vw, 34px); font-weight: 570; letter-spacing: -.045em; }
+  </style>
+</head>
+<body>
+  <div class="caption"><h1>VibraPod Inside</h1></div>
+
+  <!-- CDN-only ES modules. This file can be opened directly in a modern browser. -->
+  <!-- The map also lets Three's official add-ons resolve their internal `three` import. -->
+  <script type="importmap">
+    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js" } }
+  </script>
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js';
+    import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/controls/OrbitControls.js';
+    import { RoundedBoxGeometry } from 'https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/geometries/RoundedBoxGeometry.js';
+    import { RectAreaLightUniformsLib } from 'https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/lights/RectAreaLightUniformsLib.js';
+    RectAreaLightUniformsLib.init();
+
+    // ── Easy hardware tuning ────────────────────────────────────────────────
+    // Units are viewport-friendly, proportional to the intended 93 × 38 × 15 mm pod.
+    const POD = { length: 9.3, width: 3.8, height: 1.5, radius: 0.32 };
+    const COLORS = {
+      housing: 0x202326, fabric: 0x4d5356, inset: 0x111315,
+      led: 0x79db99, background: 0xecefed
+    };
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(COLORS.background);
+
+    const camera = new THREE.PerspectiveCamera(35, innerWidth / innerHeight, 0.1, 100);
+    camera.position.set(11.5, 8.5, 15.5);
+    camera.lookAt(0, 0, 0);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.08;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    document.body.prepend(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.055;
+    controls.minDistance = 9;
+    controls.maxDistance = 29;
+    controls.target.set(0, -0.25, 0);
+    
+    // Disable zooming to prevent scroll trapping
+    controls.enableZoom = false;
+
+    // The presentation group rotates; controls still orbit freely around it.
+    const product = new THREE.Group();
+    product.rotation.y = -0.28;
+    scene.add(product);
+
+    // Procedural micrograin and woven threads: embedded textures, no image files.
+    function surfaceTexture(woven) {
+      const canvas = document.createElement('canvas');
+      canvas.width = canvas.height = 256;
+      const ctx = canvas.getContext('2d');
+      const pixels = ctx.createImageData(256, 256);
+      let seed = 17;
+      for (let y = 0; y < 256; y++) for (let x = 0; x < 256; x++) {
+        seed = (seed * 1664525 + 1013904223) >>> 0;
+        const noise = seed / 4294967296;
+        const weave = Math.sin(x * Math.PI / 4) * Math.cos(y * Math.PI / 4);
+        const value = woven ? 155 + weave * 48 + noise * 22 : 165 + noise * 60;
+        const i = (y * 256 + x) * 4;
+        pixels.data[i] = pixels.data[i + 1] = pixels.data[i + 2] = value;
+        pixels.data[i + 3] = 255;
+      }
+      ctx.putImageData(pixels, 0, 0);
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(woven ? 10 : 4, woven ? 2 : 2);
+      texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      return texture;
+    }
+    const grain = surfaceTexture(false), weave = surfaceTexture(true);
+    const plastic = new THREE.MeshStandardMaterial({ color: COLORS.housing, roughness: 0.62, metalness: 0.03, bumpMap: grain, bumpScale: 0.018 });
+    const fabric = new THREE.MeshStandardMaterial({ color: COLORS.fabric, roughness: 0.94, metalness: 0.0, bumpMap: weave, bumpScale: 0.035 });
+    const recess = new THREE.MeshStandardMaterial({ color: COLORS.inset, roughness: 0.83, metalness: 0.0 });
+    const ledMaterial = new THREE.MeshStandardMaterial({ color: COLORS.led, emissive: COLORS.led, emissiveIntensity: 1.35, roughness: 0.4 });
+
+    // Soft studio floor and its diffuse contact shadow.
+    const floor = new THREE.Mesh(
+      new THREE.PlaneGeometry(80, 80),
+      new THREE.ShadowMaterial({ color: 0x61706b, opacity: 0.12 })
+    );
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.y = -4.65;
+    floor.receiveShadow = true;
+    scene.add(floor);
+
+    // ── Curved neoprene armband ────────────────────────────────────────────
+    // A closed, slightly flattened oval tube makes the band clearly read as wearable.
+    class OvalCurve extends THREE.Curve {
+      getPoint(t, target = new THREE.Vector3()) {
+        const a = t * Math.PI * 2;
+        // The upper arc t≈0/1 nestles behind the pod's two side slots.
+        return target.set(5.28 * Math.cos(a), -0.55 + 3.72 * Math.sin(a), 0);
+      }
+    }
+    const strapPath = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-4.8, 1.65, 0), new THREE.Vector3(-5.6, 0.6, 0),
+      new THREE.Vector3(-4.5, -2.9, 0), new THREE.Vector3(0, -4.15, 0),
+      new THREE.Vector3(4.5, -2.9, 0), new THREE.Vector3(5.6, 0.6, 0),
+      new THREE.Vector3(4.8, 1.65, 0), new THREE.Vector3(0, 1.65, 0)
+    ], true, 'centripetal');
+    function bandPoint(t, offset, z) {
+      const point = strapPath.getPoint(t);
+      const tangent = strapPath.getTangent(t);
+      return point.add(new THREE.Vector3(tangent.y, -tangent.x, 0).multiplyScalar(offset)).setZ(z);
+    }
+    // Wide ribbon cross-section, with actual inner/outer faces and bound edges.
+    const strapGeometry = new THREE.BufferGeometry();
+    const positions = [], uvs = [], indices = [];
+    const segments = 192, halfWidth = 1.20, thickness = 0.15;
+    for (let i = 0; i <= segments; i++) {
+      for (const [offset, z] of [[thickness / 2, -halfWidth], [thickness / 2, halfWidth], [-thickness / 2, halfWidth], [-thickness / 2, -halfWidth]]) {
+        const p = bandPoint(i / segments, offset, z);
+        positions.push(p.x, p.y, p.z);
+        uvs.push(i / segments, z / (2 * halfWidth) + 0.5);
+      }
+    }
+    for (let i = 0; i < segments; i++) for (let j = 0; j < 4; j++) {
+      const a = i * 4 + j, b = i * 4 + (j + 1) % 4;
+      indices.push(a, b, a + 4, b, b + 4, a + 4);
+    }
+    strapGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    strapGeometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+    strapGeometry.setIndex(indices);
+    strapGeometry.computeVertexNormals();
+    fabric.side = THREE.DoubleSide;
+    const strap = new THREE.Mesh(strapGeometry, fabric);
+    strap.castShadow = true;
+    strap.receiveShadow = true;
+    product.add(strap);
+
+    // Subtle edge binding and individual stitch dashes distinguish fabric from rubber.
+    const threadMaterial = new THREE.MeshStandardMaterial({ color: 0x737a7a, roughness: 1 });
+    for (const z of [-1.08, 1.08]) {
+      const points = [];
+      for (let i = 0; i < 140; i++) {
+        for (const t of [i / 140, (i + 0.48) / 140]) {
+          points.push(bandPoint(t, 0.085, z));
+        }
+      }
+      product.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(points), new THREE.LineBasicMaterial({ color: 0x838986 })));
+    }
+
+    // Main housing is raised over the strap, so the band appears to thread underneath.
+    const housing = new THREE.Mesh(
+      new RoundedBoxGeometry(POD.length, POD.height, POD.width, 6, POD.radius), plastic
+    );
+    housing.position.y = 2.62;
+    housing.castShadow = true;
+    housing.receiveShadow = true;
+    housing.material = new THREE.MeshStandardMaterial({ color: 0x9baeb1, roughness: 0.36, metalness: 0.05, transparent: true, opacity: 0.17, depthWrite: false, side: THREE.DoubleSide });
+    housing.renderOrder = 5;
+    product.add(housing);
+
+    // Keep the lower shell's silhouette continuous: an oversized seam plate
+    // would protrude past the housing's rounded corners.
+    // Restrained printed identification on the upper shell.
+    const printCanvas = document.createElement('canvas');
+    printCanvas.width = 512; printCanvas.height = 128;
+    const printContext = printCanvas.getContext('2d');
+    printContext.fillStyle = '#858e8c';
+    printContext.font = '500 48px sans-serif';
+    printContext.fillText('V I B R A', 14, 64);
+    printContext.font = '18px sans-serif';
+    printContext.fillText('H A P T I C   P O D', 17, 102);
+    const printTexture = new THREE.CanvasTexture(printCanvas);
+    printTexture.colorSpace = THREE.SRGBColorSpace;
+    const marking = new THREE.Mesh(new THREE.PlaneGeometry(2.8, 0.7), new THREE.MeshBasicMaterial({ map: printTexture, transparent: true, depthWrite: false }));
+    marking.rotation.x = -Math.PI / 2;
+    marking.position.set(-1.8, 3.376, 0.15);
+    marking.visible = false;
+    product.add(marking);
+
+    // Slot shadows: compact recessed openings at each short edge of the pod.
+    function addSlot(x) {
+      const slot = new THREE.Mesh(new THREE.BoxGeometry(0.055, 0.34, 2.55), recess);
+      slot.position.set(x, 1.99, 0);
+      product.add(slot);
+      const lip = new THREE.Mesh(new THREE.BoxGeometry(0.075, 0.40, 2.64), recess);
+      lip.position.set(x * 0.996, 1.99, 0);
+      product.add(lip);
+    }
+    addSlot(-POD.length / 2 - 0.008);
+    addSlot(POD.length / 2 + 0.008);
+
+    // Motor window: subtle circular inset on the skin-facing underside.
+    const motor = new THREE.Mesh(new THREE.CylinderGeometry(0.75, 0.75, 0.035, 48), recess);
+    motor.position.set(-3.0, 2.62 - POD.height / 2 - 0.018, 0);
+    product.add(motor);
+    const motorRing = new THREE.Mesh(
+      new THREE.TorusGeometry(0.76, 0.026, 8, 48),
+      new THREE.MeshStandardMaterial({ color: 0x34393b, roughness: 0.62 })
+    );
+    motorRing.rotation.x = Math.PI / 2;
+    motorRing.position.copy(motor.position);
+    motorRing.position.y -= 0.017;
+    product.add(motorRing);
+    for (const radius of [0.48, 0.59]) {
+      const groove = new THREE.Mesh(new THREE.TorusGeometry(radius, 0.009, 6, 64), threadMaterial);
+      groove.rotation.x = Math.PI / 2;
+      groove.position.set(-3.0, motor.position.y - 0.02, 0);
+      product.add(groove);
+    }
+    // Four small recessed fasteners on the skin-facing shell.
+    for (const x of [-3.7, 3.7]) for (const z of [-1.14, 1.14]) {
+      const screw = new THREE.Mesh(new THREE.CylinderGeometry(0.105, 0.105, 0.024, 24), recess);
+      screw.position.set(x, 1.858, z);
+      product.add(screw);
+      const drive = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.008, 0.025), threadMaterial);
+      drive.position.set(x, 1.842, z);
+      product.add(drive);
+    }
+
+    // Status LED on the top face, offset toward a long-edge corner.
+    const led = new THREE.Mesh(new THREE.SphereGeometry(0.105, 20, 14), ledMaterial);
+    led.scale.y = 0.34;
+    led.position.set(2.92, 2.62 + POD.height / 2 + 0.02, -1.05);
+    product.add(led);
+    const ledBezel = new THREE.Mesh(new THREE.TorusGeometry(0.14, 0.024, 10, 32), recess);
+    ledBezel.rotation.x = Math.PI / 2;
+    ledBezel.position.set(2.92, 3.377, -1.05);
+    product.add(ledBezel);
+    const ledGlow = new THREE.PointLight(COLORS.led, 0.4, 2.6, 2);
+    ledGlow.position.set(2.92, 3.2, -1.05);
+    product.add(ledGlow);
+
+    // USB-C dimensions: width along the short edge, height, and rim thickness.
+    // Construct the capsule in 2D so its corner radius is independent of depth.
+    const USB = { width: 0.96, height: 0.34, rim: 0.045 };
+    function capsule(width, height) {
+      const shape = new THREE.Shape();
+      const r = height / 2, end = width / 2 - r;
+      shape.moveTo(-end, -r);
+      shape.lineTo(end, -r);
+      shape.absarc(end, 0, r, -Math.PI / 2, Math.PI / 2, false);
+      shape.lineTo(-end, r);
+      shape.absarc(-end, 0, r, Math.PI / 2, Math.PI * 1.5, false);
+      shape.closePath();
+      return shape;
+    }
+    const portAssembly = new THREE.Group();
+    portAssembly.rotation.y = Math.PI / 2;
+    // Parent to the shell and follow its rounded shoulder instead of floating
+    // a flat connector in front of the curved enclosure.
+    const portHeight = 0.4;
+    portAssembly.position.set(POD.length / 2, portHeight, 0);
+    housing.add(portAssembly);
+    function seatOnHousing(geometry, depthOffset) {
+      const vertices = geometry.attributes.position;
+      for (let i = 0; i < vertices.count; i++) {
+        const y = Math.abs(vertices.getY(i) + portHeight);
+        const shoulder = Math.max(0, y - (POD.height / 2 - POD.radius));
+        const setback = POD.radius - Math.sqrt(Math.max(0, POD.radius ** 2 - shoulder ** 2));
+        vertices.setZ(i, vertices.getZ(i) + depthOffset - setback);
+      }
+      vertices.needsUpdate = true;
+      geometry.computeVertexNormals();
+      return geometry;
+    }
+    const cavity = new THREE.Mesh(new THREE.ShapeGeometry(capsule(USB.width, USB.height), 32), recess);
+    seatOnHousing(cavity.geometry, 0.002);
+    portAssembly.add(cavity);
+    const rimShape = capsule(USB.width + USB.rim * 2, USB.height + USB.rim * 2);
+    const opening = new THREE.Path(capsule(USB.width, USB.height).getPoints(32).reverse());
+    rimShape.holes.push(opening);
+    const rim = new THREE.Mesh(new THREE.ExtrudeGeometry(rimShape, {
+      depth: 0.03, bevelEnabled: false, curveSegments: 32
+    }), new THREE.MeshStandardMaterial({ color: 0x727c7e, roughness: 0.48, metalness: 0.45 }));
+    seatOnHousing(rim.geometry, -0.015);
+    portAssembly.add(rim);
+    // Thin central tongue, set behind the front lip of the open capsule rim.
+    const tongue = new THREE.Mesh(new THREE.ShapeGeometry(capsule(0.64, 0.065), 16),
+      new THREE.MeshStandardMaterial({ color: 0x657072, roughness: 0.65, metalness: 0.15 }));
+    seatOnHousing(tongue.geometry, 0.008);
+    portAssembly.add(tongue);
+
+
+    // ── Interior concept ──────────────────────────────────────────────────
+    // Photo-inspired geometry, not dimensionally verified CAD or a wiring guide.
+    // Components use 0.1 scene units/mm. Recheck board model and power circuitry
+    // before building: the battery leads below show routing, not a verified supply.
+    const inside = new THREE.Group();
+    product.add(inside);
+    const metal = new THREE.MeshStandardMaterial({ color: 0xb7bfc1, metalness: 0.65, roughness: 0.43 });
+    const gold = new THREE.MeshStandardMaterial({ color: 0xd2b36d, metalness: 0.6, roughness: 0.45 });
+    const chip = new THREE.MeshStandardMaterial({ color: 0x17191c, roughness: 0.7 });
+    const purple = new THREE.MeshStandardMaterial({ color: 0x66346f, roughness: 0.65 });
+    function block(size, position, material, radius = 0.035) {
+      const mesh = new THREE.Mesh(new RoundedBoxGeometry(...size, 3, radius), material);
+      mesh.position.set(...position);
+      inside.add(mesh);
+      return mesh;
+    }
+    function disc(radius, height, position, material) {
+      const mesh = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius, height, 48), material);
+      mesh.position.set(...position);
+      inside.add(mesh);
+      return mesh;
+    }
+    function printLabel(text, x, y, z, width, color = '#dbe1db') {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1024; canvas.height = 128;
+      const ctx = canvas.getContext('2d');
+      ctx.font = '500 54px monospace'; ctx.fillStyle = color;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(text, 512, 64);
+      const map = new THREE.CanvasTexture(canvas);
+      map.colorSpace = THREE.SRGBColorSpace;
+      const label = new THREE.Mesh(new THREE.PlaneGeometry(width, width / 8),
+        new THREE.MeshBasicMaterial({ map, transparent: true, depthWrite: false }));
+      label.rotation.x = -Math.PI / 2;
+      label.position.set(x, y, z);
+      inside.add(label);
+    }
+
+    // ESP32-C3: board extends inward from the actual enclosure port.
+    // The connector and housing port share the same centerline (Y=3.02, Z=0).
+    const boardY = housing.position.y + portHeight - 0.235;
+    block([2.45, 0.09, 1.88], [3.0, boardY, 0], purple);
+    block([1.0, 0.17, 1.04], [2.70, boardY + 0.13, 0], chip);
+    block([0.42, 0.13, 0.82], [1.99, boardY + 0.115, 0], chip);
+    for (const z of [-0.79, 0.79]) for (let i = 0; i < 8; i++) {
+      const x = 1.96 + i * 0.285;
+      disc(0.085, 0.012, [x, boardY + 0.052, z], gold);
+      disc(0.037, 0.014, [x, boardY + 0.06, z], recess);
+    }
+    for (let i = 0; i < 6; i++) {
+      block([0.09, 0.055, 0.16], [2.10 + i * 0.23, boardY + 0.075, -0.59], metal, 0.012);
+    }
+    for (const z of [-0.58, 0.58]) {
+      block([0.24, 0.1, 0.24], [3.55, boardY + 0.10, z], metal);
+      disc(0.068, 0.035, [3.55, boardY + 0.17, z], chip);
+    }
+    printLabel('ESP32-C3', 2.70, boardY + 0.222, 0, 0.95);
+
+    // Continuous USB-C socket barrel meets the enclosure's visible capsule.
+    // Its open front reuses the existing port mouth, avoiding doubled connectors.
+    const socketShape = capsule(USB.width + USB.rim * 2, USB.height + USB.rim * 2);
+    socketShape.holes.push(new THREE.Path(capsule(USB.width, USB.height).getPoints(32).reverse()));
+    const socket = new THREE.Mesh(new THREE.ExtrudeGeometry(socketShape, {
+      depth: 0.66, bevelEnabled: false, curveSegments: 32
+    }), metal);
+    socket.rotation.y = Math.PI / 2;
+    socket.position.set(POD.length / 2 - 0.66, housing.position.y + portHeight, 0);
+    inside.add(socket);
+    // Tongue continues from the PCB into the port.
+    block([0.67, 0.065, 0.64], [4.31, housing.position.y + portHeight, 0], chip, 0.018);
+
+    // Silver LiPo pouch, folded foil edges and amber insulating tape.
+    const foil = new THREE.MeshStandardMaterial({ color: 0xc5c9c7, metalness: 0.6, roughness: 0.48, bumpMap: grain, bumpScale: 0.008 });
+    const tape = new THREE.MeshStandardMaterial({ color: 0xe2ab22, metalness: 0.1, roughness: 0.38 });
+    block([3.0, 0.4, 1.2], [-0.15, 2.77, 0.24], foil, 0.13);
+    for (const z of [-0.39, 0.87]) block([2.88, 0.08, 0.06], [-0.15, 2.72, z], foil, 0.025);
+    block([0.38, 0.415, 1.23], [1.15, 2.77, 0.24], tape, 0.08);
+    printLabel('LiPo  3.7V  170mAh', -0.34, 2.979, 0.22, 2.25, '#343938');
+    printLabel('401230', -0.36, 2.979, 0.52, 1.15, '#343938');
+
+    // Motor module: PCB above, coin motor facing the skin window below.
+    block([2.1, 0.09, 2.2], [-3.0, 2.49, 0], chip);
+    disc(0.68, 0.34, [-3.0, 2.22, 0], metal);
+    disc(0.62, 0.035, [-3.0, 2.035, 0], recess);
+    for (const z of [-0.85, 0.85]) {
+      disc(0.13, 0.014, [-3.79, 2.543, z], metal);
+      disc(0.08, 0.017, [-3.79, 2.555, z], recess);
+    }
+    printLabel('VIBRATION', -3.0, 2.545, -0.38, 1.55);
+    block([0.25, 0.1, 0.32], [-2.38, 2.58, 0.20], chip);
+    for (const z of [-0.25, 0.1, 0.45]) {
+      block([0.24, 0.15, 0.22], [-2.16, 2.60, z], chip);
+      disc(0.048, 0.018, [-2.16, 2.685, z], gold);
+    }
+
+    // Color-coded cable routes with shared, explicit endpoint positions.
+    // Red = conceptual supply, black = common return, blue = motor control.
+    // No charger/regulator is modeled; confirm the exact board's LiPo support.
+    function wire(points, color, radius = 0.028) {
+      const path = new THREE.CatmullRomCurve3(points.map(p => new THREE.Vector3(...p)));
+      const mesh = new THREE.Mesh(new THREE.TubeGeometry(path, 48, radius, 8, false),
+        new THREE.MeshStandardMaterial({ color, roughness: 0.64 }));
+      inside.add(mesh);
+      for (const p of [points[0], points[points.length - 1]]) disc(0.052, 0.028, p, metal);
+    }
+    const supply = [1.96, boardY + 0.075, 0.79];
+    const ground = [2.245, boardY + 0.075, 0.79];
+    const signal = [2.53, boardY + 0.075, -0.79];
+    wire([[1.35, 2.8, 0.46], [1.52, 2.85, 0.65], [1.63, 2.93, 1.02], supply], 0xc33936);
+    wire([[1.35, 2.8, 0.65], [1.51, 2.82, 1.13], [2.12, 2.91, 1.14], ground], 0x24272c);
+    wire([supply, [1.65, 2.95, 1.28], [-1.7, 2.9, 1.28], [-2.16, 2.685, 0.1]], 0xc33936);
+    wire([ground, [1.62, 2.90, 1.43], [-1.79, 2.83, 1.43], [-2.16, 2.685, 0.45]], 0x24272c);
+    wire([signal, [1.65, 2.93, -1.29], [-1.79, 2.85, -1.29], [-2.16, 2.685, -0.25]], 0x3879bb);
+    // Short leads on the motor module connect the coin motor to its driver.
+    wire([[-3.5, 2.18, 0.35], [-3.57, 2.28, 0.63], [-2.4, 2.38, 0.68]], 0xc33936, 0.02);
+    wire([[-3.5, 2.18, 0.45], [-3.57, 2.30, 0.78], [-2.4, 2.38, 0.83]], 0x3879bb, 0.02);
+
+    // Three soft product-photography lights: key, fill, and slim rim.
+    const hemi = new THREE.HemisphereLight(0xf8fbfa, 0x7d8583, 1.55);
+    scene.add(hemi);
+    function studioLight(color, intensity, position, size) {
+      const light = new THREE.RectAreaLight(color, intensity, size, size);
+      light.position.set(...position);
+      light.lookAt(0, 0, 0);
+      scene.add(light);
+    }
+    studioLight(0xffffff, 5.0, [7, 11, 9], 6);       // key
+    studioLight(0xd8e5e1, 3.0, [-10, 5, 4], 5);      // fill
+    studioLight(0xd2e7de, 4.3, [-2, 8, -11], 4);     // rim
+
+    let dragging = false;
+    let lastInteraction = -Infinity;
+    const resumeDelay = 2600;
+    controls.addEventListener('start', () => { dragging = true; lastInteraction = performance.now(); });
+    controls.addEventListener('end', () => { dragging = false; lastInteraction = performance.now(); });
+    controls.addEventListener('change', () => { lastInteraction = performance.now(); });
+    renderer.domElement.addEventListener('wheel', () => { lastInteraction = performance.now(); }, { passive: true });
+
+    const clock = new THREE.Clock();
+    function animate() {
+      requestAnimationFrame(animate);
+      const dt = Math.min(clock.getDelta(), 0.05);
+      if (!dragging && performance.now() - lastInteraction > resumeDelay) product.rotation.y += dt * 0.19;
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    addEventListener('resize', () => {
+      camera.aspect = innerWidth / innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    });
+  </script>
+</body>
+</html>
