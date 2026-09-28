@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Load Inter Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="planet.png?v=1">
+    <link rel="icon" type="image/png" href="planet.png">
     <script>
         tailwind.config = {
             theme: {
@@ -66,14 +66,16 @@
             </div>
             
             <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-8">
-                Building Accessible <br class="hidden md:block" /> Haptic Feedback.
+                Engineering Accessible <br class="hidden md:block" /> Haptic Feedback.
             </h1>
             <p class="max-w-2xl mx-auto text-lg md:text-xl text-muted leading-relaxed">
-                VibraCoach started as a vision to create an intuitive wearable system. Powered by the <strong>ESP32-C3</strong> and connected via <strong>BLE</strong>, it delivers distinct physical cues for real-time coaching.
+                The VibraCoach project started in Οπεν Hackathon for Accessibility 2026 as a vision to help deaf and hard-of-hearing athletes compete in sports without 
+                the need of visual or auditory cues. 
+                Powered by the <strong>ESP32-C3</strong> and connected via <strong>BLE</strong>, it delivers 
+                distinct (and customizable) physical cues for real-time coaching.
             </p>
         </section>
 
-        <!-- Intro / Origin Story -->
         <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="bg-white/40 backdrop-blur-sm rounded-3xl p-8 md:p-12 shadow-sm border border-gray-200/50">
                 <div class="flex items-center gap-5 mb-6">
@@ -82,12 +84,22 @@
                 </div>
                 <div class="space-y-6 text-lg text-ink/80 leading-relaxed">
                     <p>
-                        The idea was born during the <strong>Oπεν Hackathon 2026 for Accessibility</strong>. I teamed up with <a href="https://www.linkedin.com/in/iliadistheo/" target="_blank" class="text-accent font-semibold hover:underline">Theodoris Iliadis</a> to form <strong>Team Kronos</strong> and tackle a unique challenge in the accessibility space. 
+                        The idea was born during the <strong>Oπεν Hackathon 2026 for Accessibility</strong>. 
+                        Under the umbrella of my startup initiative <strong>Kronos</strong>, 
+                        I partnered with <a href="https://www.linkedin.com/in/iliadistheo/" target="_blank" class="text-[#13428a] font-semibold hover:underline">Theodoris Iliadis</a> for 
+                        the weekend to tackle a unique challenge in the accessibility space. 
+                        My name is <a href="https://www.linkedin.com/in/AggelosLadasDev/" target="_blank" class="text-[#13428a] font-semibold hover:underline">Aggelos Ladas</a> and this is how the VibraCoach project came to life.
                     </p>
                     <div class="bg-brandbg p-6 rounded-2xl border border-gray-200 mt-4">
                         <h3 class="font-bold text-ink mb-2">The Problem We Wanted to Solve:</h3>
-                        <p class="text-muted text-base italic">
-                            
+                        <p class="text-muted text-base">
+                            Deaf and hard-of-hearing individuals often face challenges in receiving real-time feedback during physical activities. 
+                            Traditional visual or auditory cues can be limiting, especially in dynamic environments. 
+                            We envisioned a wearable device that could provide distinct haptic feedback, allowing users to receive immediate guidance without relying on sight or sound. 
+                            This way, deaf basketball players, for instance, could feel the rhythm of the game and receive coaching cues through vibrations, enhancing their performance and engagement. 
+                            We did this with a simple architecture: a small wearable device that communicates with a mobile app via Bluetooth Low Energy (BLE). 
+                            The app features a total of 8 customizable vibration patterns, each corresponding to specific coaching cues. 
+                            The app is still in its early stages, but the prototype demonstrates the potential of haptic feedback in sports coaching for the deaf and hard-of-hearing community.
                         </p>
                     </div>
                 </div>
@@ -111,7 +123,15 @@
                     
                     <h4 class="text-2xl font-bold mb-4">First Hardware & Mobile Sync</h4>
                     <p class="text-lg text-ink/80 mb-8 max-w-2xl">
-                        We started by getting our hands dirty with the hardware. This was our first time working with the ESP32-C3 SuperMini. We managed to flash our initial C++ firmware to establish a Bluetooth Low Energy (BLE) server. Simultaneously, we scaffolded the companion native Android app using Jetpack Compose to successfully send connection handshakes.
+                        The first day was a big challenge. 
+                        There was a lot of research to do to get familiarized with the core concept of our problem. 
+                        One thing was certain, the solution is a wearable device.
+                        How do we help deaf athletes get real-time feedback without breaking the rules of Basketball?
+                        Can athletes even wear wearables during a game? How do we start?
+                        Fortunately, me and Theodoris had a brainstorming session and we came up with a simple architecture: a small wearable device that communicates with a mobile app.
+                        This is were we tackled our real first challenge, hardware. 
+                        Thodoris and I both come from a software engineering background, 
+                        so the hardware part was a challenge on its own. 
                     </p>
                     
                     <img src="day1-board.jpg" alt="ESP32-C3 Board" loading="lazy" class="rounded-2xl shadow-sm border border-gray-200/50 w-full max-w-3xl h-auto">
