@@ -3,12 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VibraCoach</title>
-    <!-- Load Tailwind CSS -->
+    
+    <title>VibraCoach - Haptic Feedback Wearable for Deaf Athletes</title>
+    <meta name="title" content="VibraCoach - Haptic Feedback Wearable for Deaf Athletes">
+    <meta name="description" content="VibraCoach by Aggelos Ladas and Theodoris Iliadis is an ESP32-powered wearable that delivers real-time haptic feedback coaching for deaf and hard-of-hearing athletes.">
+    <link rel="canonical" href="https://aggelosladas.com/vibracoach">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://aggelosladas.com/vibracoach">
+    <meta property="og:title" content="VibraCoach - Haptic Feedback Wearable">
+    <meta property="og:description" content="Empowering deaf and hard-of-hearing athletes with real-time coaching through customizable wearable vibrations.">
+    <meta property="og:image" content="https://aggelosladas.com/vibracoach-thumbnail.jpg">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://aggelosladas.com/vibracoach">
+    <meta name="twitter:title" content="VibraCoach - Haptic Feedback Wearable">
+    <meta name="twitter:description" content="Empowering deaf and hard-of-hearing athletes with real-time coaching through customizable wearable vibrations.">
+    <meta name="twitter:image" content="https://aggelosladas.com/vibracoach-thumbnail.jpg">
+
+    
+    <link rel="icon" href="/favicon.ico">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    
+    <link rel="manifest" href="/site.webmanifest">
+    
+    <link rel="icon" type="image/png" sizes="48x48" href="/planet-48x48.png">
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Inter Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="planet.png">
+    
     <script>
         tailwind.config = {
             theme: {
@@ -35,86 +62,108 @@
 </head>
 <body class="bg-brandbg text-ink font-sans antialiased overflow-x-hidden">
 
-    <!-- Navigation -->
-    <nav class="w-full py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex justify-between items-center border-b border-gray-300/40">
-        <div class="text-2xl font-bold tracking-tighter flex items-center gap-2">
-            VibraCoach
+    <nav class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+        <div class="flex items-center justify-between text-sm text-ink/70 pb-3">
+            <span>Team Kronos</span>
+            <span class="hidden sm:inline">Οπεν Hackathon 2026 &middot; Accessibility</span>
+            <a href="#journey" class="text-ink font-medium underline underline-offset-4 decoration-accent decoration-2 hover:decoration-ink">Build log</a>
         </div>
-        <a href="#journey" class="text-sm font-bold uppercase tracking-widest text-muted hover:text-ink transition-colors">The Prototype</a>
+        <div class="border-t-[3px] border-b border-ink py-2 text-center">
+            <span class="text-4xl md:text-5xl font-black tracking-tighter">Vibra<span class="italic font-light">Coach</span></span>
+        </div>
     </nav>
 
+
+    
     <main>
-        <!-- Hero Section -->
-        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-16 lg:pt-16 lg:pb-20 text-center">
-            
-            <!-- Full Team Kronos Logo (Loads immediately) -->
-            <div class="flex justify-center mb-10">
-                <img src="kronos-logo.png" alt="Team Kronos" class="h-40 md:h-56 lg:h-64 w-auto object-contain drop-shadow-md">
-            </div>
-            
-            <!-- Redesigned Hackathon Spotlight (Loads immediately) -->
-            <div class="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 mb-12">
-                <img src="hackathon-logo.png" alt="Oπεν Hackathon Logo" class="h-32 md:h-44 w-auto object-contain shrink-0">
-                <div class="text-center md:text-left">
-                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-ink mb-2">
-                        Oπεν Hackathon 2026
-                    </h2>
-                    <p class="text-xl md:text-2xl lg:text-3xl font-semibold text-[#13428a]">
-                        For Accessibility
-                    </p>
-                </div>
-            </div>
-            
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-16 lg:pt-20 lg:pb-20 text-center">
+
             <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-8">
                 Engineering Accessible <br class="hidden md:block" /> Haptic Feedback.
             </h1>
-            <p class="max-w-2xl mx-auto text-lg md:text-xl text-muted leading-relaxed">
+
+            <p class="max-w-2xl mx-auto text-lg md:text-xl text-ink/75 leading-relaxed">
                 The VibraCoach project started in Οπεν Hackathon for Accessibility 2026 as a vision to help deaf and hard-of-hearing athletes compete in sports without 
                 the need of visual or auditory cues. 
                 Powered by the <strong>ESP32-C3</strong> and connected via <strong>BLE</strong>, it delivers 
                 distinct (and customizable) physical cues for real-time coaching.
             </p>
-        </section>
 
-        <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="bg-white/40 backdrop-blur-sm rounded-3xl p-8 md:p-12 shadow-sm border border-gray-200/50">
-                <div class="flex items-center gap-5 mb-6">
-                    <img src="planet.png" alt="Kronos Planet" loading="lazy" class="h-16 md:h-20 w-auto object-contain drop-shadow-sm">
-                    <h2 class="text-3xl md:text-4xl font-bold">How It Started</h2>
-                </div>
-                <div class="space-y-6 text-lg text-ink/80 leading-relaxed">
-                    <p>
-                        The idea was born during the <strong>Oπεν Hackathon 2026 for Accessibility</strong>. 
-                        Under the umbrella of my startup initiative <strong>Kronos</strong>, 
-                        I partnered with <a href="https://www.linkedin.com/in/iliadistheo/" target="_blank" class="text-[#13428a] font-semibold hover:underline">Theodoris Iliadis</a> for 
-                        the weekend to tackle a unique challenge in the accessibility space. 
-                        My name is <a href="https://www.linkedin.com/in/AggelosLadasDev/" target="_blank" class="text-[#13428a] font-semibold hover:underline">Aggelos Ladas</a> and this is how the VibraCoach project came to life.
-                    </p>
-                    <div class="bg-brandbg p-6 rounded-2xl border border-gray-200 mt-4">
-                        <h3 class="font-bold text-ink mb-2">The Problem We Wanted to Solve:</h3>
-                        <p class="text-muted text-base">
-                            Deaf and hard-of-hearing individuals often face challenges in receiving real-time feedback during physical activities. 
-                            Traditional visual or auditory cues can be limiting, especially in dynamic environments. 
-                            We envisioned a wearable device that could provide distinct haptic feedback, allowing users to receive immediate guidance without relying on sight or sound. 
-                            This way, deaf basketball players, for instance, could feel the rhythm of the game and receive coaching cues through vibrations, enhancing their performance and engagement. 
-                            We did this with a simple architecture: a small wearable device that communicates with a mobile app via Bluetooth Low Energy (BLE). 
-                            The app features a total of 8 customizable vibration patterns, each corresponding to specific coaching cues. 
-                            The app is still in its early stages, but the prototype demonstrates the potential of haptic feedback in sports coaching for the deaf and hard-of-hearing community.
-                        </p>
-                    </div>
+        <div class="mt-16 flex flex-col lg:flex-row items-center justify-center gap-10 lg:gap-14">
+            <img src="kronos-logo.png" alt="Team Kronos" class="h-32 md:h-40 lg:h-44 w-auto object-contain mix-blend-multiply">
+
+            <div class="hidden lg:block h-28 w-px bg-ink/20"></div>
+
+            <div class="flex flex-col sm:flex-row items-center gap-5 sm:gap-6">
+                <img src="hackathon-logo.png" alt="Οπεν Hackathon Logo" class="h-32 md:h-40 lg:h-44 w-auto object-contain shrink-0">
+                <div class="text-center sm:text-left">
+                    <p class="text-2xl md:text-3xl font-bold leading-tight">Οπεν Hackathon 2026</p>
+                    <p class="text-lg md:text-xl font-semibold text-[#13428a]">For Accessibility</p>
                 </div>
             </div>
+        </div>
+
+
         </section>
 
-        <!-- The Prototype Stages -->
+        <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-14">
+
+        <div class="md:col-span-4">
+            <h2 class="text-4xl md:text-5xl font-black tracking-tighter leading-none">How it<br>started</h2>
+            <div class="mt-6 h-1 w-16 bg-[#13428a] rounded-full"></div>
+
+            <figure class="mt-10 max-w-xs mx-auto md:max-w-none">
+                <div class="relative">
+                    <div class="absolute inset-0 translate-x-3 translate-y-3 rounded-3xl bg-[#13428a]" aria-hidden="true"></div>
+                    <img src="team.png" alt="Aggelos Ladas and Theodoris Iliadis, Team Kronos" loading="lazy"
+                         class="relative w-full h-auto rounded-3xl border-4 border-brandbg object-cover">
+                </div>
+                <figcaption class="mt-6 text-sm text-ink/70">
+                    <span class="font-semibold text-ink">Team Kronos</span><br>
+                      Theodoris Iliadis (left) &amp; Aggelos Ladas (right)
+                </figcaption>
+            </figure>
+        </div>
+
+        <div class="md:col-span-8">
+            <p class="text-xl md:text-2xl leading-relaxed text-ink">
+                My name is <a href="https://www.linkedin.com/in/AggelosLadasDev/" target="_blank" class="text-[#13428a] font-semibold hover:underline">Aggelos Ladas</a> and this is how the VibraCoach project came to life.
+                The idea was born during the <strong>Οπεν Hackathon 2026 for Accessibility</strong>.
+                Under the umbrella of my startup initiative <strong>Kronos</strong>,
+                I partnered with <a href="https://www.linkedin.com/in/iliadistheo/" target="_blank" class="text-[#13428a] font-semibold hover:underline">Theodoris Iliadis</a> for
+                the weekend to tackle a unique challenge in the accessibility space.
+            </p>
+
+            <div class="mt-10 border-l-4 border-[#13428a] pl-6 md:pl-8">
+                <h3 class="text-sm font-bold uppercase tracking-wider text-[#13428a] mb-4">The problem we wanted to solve</h3>
+                <div class="space-y-4 text-lg text-ink/80 leading-relaxed">
+                    <p>
+                        Deaf and hard-of-hearing individuals often face challenges in receiving real-time feedback during physical activities.
+                        Traditional visual or auditory cues can be limiting, especially in dynamic environments.
+                    </p>
+                    <p>
+                        We envisioned a wearable device that could provide distinct haptic feedback, allowing users to receive immediate guidance without relying on sight or sound.
+                        This way, deaf basketball players, for instance, could feel the rhythm of the game and receive coaching cues through vibrations, enhancing their performance and engagement.
+                    </p>
+                    <p>
+                        We did this with a simple architecture: a small wearable device that communicates with a mobile app via Bluetooth Low Energy (BLE).
+                        The app features a total of 8 customizable vibration patterns, each corresponding to specific coaching cues.
+                        The app is still in its early stages, but the prototype demonstrates the potential of haptic feedback in sports coaching for the deaf and hard-of-hearing community.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
         <section id="journey" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
             <h2 class="text-4xl font-bold text-center mb-20">The 3-Day Prototype</h2>
             
             <div class="space-y-28">
                 
-                <!-- Day 1 -->
                 <div>
-                    <!-- Editorial Day UI -->
                     <div class="flex items-center gap-4 mb-6">
                         <img src="planet.png" alt="Planet Motif" loading="lazy" class="w-10 h-10 md:w-12 md:h-12 object-contain">
                         <h3 class="text-4xl md:text-5xl font-black tracking-tighter text-ink">DAY 1</h3>
@@ -138,9 +187,7 @@
                     <p class="text-sm text-ink/70 mt-3 font-medium">ESP32-C3 Board and USB connection setup.</p>
                 </div>
 
-                <!-- Day 2 -->
                 <div>
-                    <!-- Editorial Day UI -->
                     <div class="flex items-center gap-4 mb-6">
                         <img src="planet.png" alt="Planet Motif" loading="lazy" class="w-10 h-10 md:w-12 md:h-12 object-contain">
                         <h3 class="text-4xl md:text-5xl font-black tracking-tighter text-ink">DAY 2</h3>
@@ -158,9 +205,7 @@
                     </div>
                 </div>
 
-                <!-- Day 3 -->
                 <div>
-                    <!-- Editorial Day UI -->
                     <div class="flex items-center gap-4 mb-6">
                         <img src="planet.png" alt="Planet Motif" loading="lazy" class="w-10 h-10 md:w-12 md:h-12 object-contain">
                         <h3 class="text-4xl md:text-5xl font-black tracking-tighter text-ink">DAY 3</h3>
@@ -183,7 +228,6 @@
             </div>
         </section>
 
-        <!-- 3D Explorer Section -->
         <section id="3d-explorer" class="w-full border-t border-gray-300/60 mt-12 pt-16 pb-24 relative">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-12">
                 <h2 class="text-4xl font-bold tracking-tight mb-4">Explore the Hardware, This is how we want the final product will look.</h2>
@@ -191,7 +235,6 @@
             </div>
             
             <div class="max-w-[1400px] mx-auto px-2 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-4 iframe-container">
-                <!-- Normal 3D Model -->
                 <div class="flex flex-col items-center">
                     <h3 class="text-2xl md:text-3xl font-semibold tracking-tight mb-6">VibraPod</h3>
                     <div class="w-full h-[600px] bg-brandbg rounded-3xl shadow-inner border border-white/40">
@@ -205,7 +248,6 @@
                     </div>
                 </div>
                 
-                <!-- Transparent/Interior 3D Model -->
                 <div class="flex flex-col items-center">
                     <h3 class="text-2xl md:text-3xl font-semibold tracking-tight mb-6">VibraPod Inside</h3>
                     <div class="w-full h-[600px] bg-brandbg rounded-3xl shadow-inner border border-white/40">
@@ -222,7 +264,6 @@
         </section>
     </main>
 
-    <!-- Footer -->
     <footer class="w-full py-10 mt-12 border-t border-gray-300/60 bg-[#e0e4e2]/50">
         <div class="max-w-7xl mx-auto px-4 text-center">
             <div class="text-xl font-bold tracking-tighter mb-4 flex items-center justify-center gap-2">
