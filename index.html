@@ -62,13 +62,16 @@
 </head>
 <body class="bg-brandbg text-ink font-sans antialiased overflow-x-hidden">
 
-    <nav class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-        <div class="flex items-center justify-between text-sm text-ink/70 pb-3">
-            <span>Team Kronos</span>
-            <span class="hidden sm:inline">Οπεν Hackathon 2026 &middot; Accessibility</span>
-        </div>
-        <div class="border-t-[3px] border-b border-ink py-2 text-center">
-            <span class="text-4xl md:text-5xl font-black tracking-tighter">Vibra<span class=" font-light">Coach</span></span>
+    <nav class="w-full bg-[#13428a] text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+            <a href="#" class="text-2xl font-black tracking-tighter">Vibra<span class="font-light">Coach</span></a>
+            <a href="https://github.com/AggelosLadas/VibraCoach" target="_blank" rel="noopener"
+               class="inline-flex items-center gap-2 bg-white text-[#13428a] text-sm font-bold rounded-xl px-4 py-2 hover:bg-[#dbe7fb] transition-colors">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.13v3.16c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/>
+                </svg>
+                <span>GitHub</span>
+            </a>
         </div>
     </nav>
 
@@ -197,8 +200,24 @@
                         making it actually work and display a message.
                     </p>
                     
-                    <img src="day1-board.jpg" alt="ESP32-C3 Board" loading="lazy" class="rounded-2xl shadow-sm border border-gray-200/50 w-full max-w-3xl h-auto">
-                    <p class="text-sm text-ink/70 mt-3 font-medium">ESP32-C3 Board and USB connection setup.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+    <figure class="flex flex-col">
+        <div class="relative aspect-[3/4] md:aspect-auto md:flex-1">
+            <img src="day1-board.jpg" alt="ESP32-C3 Board" loading="lazy" class="absolute inset-0 w-full h-full object-cover rounded-2xl shadow-sm border border-gray-200/50">
+        </div>
+        <figcaption class="text-sm text-ink/70 mt-3 font-medium">ESP32-C3 Board and USB connection setup.</figcaption>
+    </figure>
+    <div class="flex flex-col gap-6">
+        <figure>
+            <img src="day1-workspace.jpg" alt="Workspace on Day 1" loading="lazy" class="rounded-2xl shadow-sm border border-gray-200/50 w-full aspect-[4/3] object-cover">
+            <figcaption class="text-sm text-ink/70 mt-3 font-medium">Our workspace on Day 1.</figcaption>
+        </figure>
+        <figure>
+            <img src="day1-module.jpg" alt="Vibrating module" loading="lazy" class="rounded-2xl shadow-sm border border-gray-200/50 w-full aspect-[4/3] object-cover">
+            <figcaption class="text-sm text-ink/70 mt-3 font-medium">The vibrating module on its own.</figcaption>
+        </figure>
+    </div>
+</div>
                 </div>
 
                 <div>
@@ -243,20 +262,30 @@
 
                     <h4 class="text-2xl font-bold mb-4">Enclosure & The Final Pitch</h4>
                     <p class="text-lg text-ink/80 mb-8 max-w-2xl">
-                        A wearable needs to be worn. On the final day, we moved from breadboards to a compact form factor, 3D printing a custom box to house the battery, board, and motor safely. We integrated everything just in time for the presentation.
+                        As with any hackathon, the last day is always the most stressful.
+                        The third day was when we finalized the prototype by adding a simple 3D printed container
+                        to hold the two modules together. Special thanks to mentor <a href="https://www.linkedin.com/in/manos-koumentakis/" target="_blank" class="text-[#13428a] font-semibold hover:underline">Manos Koumentakis</a> for helping us with the 3D printing.
+                        Unfortunately, we did not have the time to buy a 
+                        battery and make it portable, but the idea was to use a small 3.7V LiPo battery.
+                        After that, we had to prepare for the final pitch. We received a lot of 
+                        positive feedback from the mentors and the judges and we were very happy with our 
+                        approach. 
+                        In the end we did not win the hackathon, but the whole experience was
+                        a great opportunity to learn first-hand how with a small team and a simple idea, 
+                        you can make a real difference in the lives of people with accessibility needs.
                     </p>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-    <div class="flex flex-col gap-4">
-        <img src="day3-pic1.jpg" alt="Enclosure build 1" loading="lazy" class="rounded-2xl shadow-sm border border-gray-200/50 w-full h-auto">
-        <img src="day3-pic2.jpg" alt="Enclosure build 2" loading="lazy" class="rounded-2xl shadow-sm border border-gray-200/50 w-full h-auto">
-    </div>
-    <div class="flex flex-col gap-4">
-        <img src="day3-pic3.jpg" alt="Enclosure build 3" loading="lazy" class="rounded-2xl shadow-sm border border-gray-200/50 w-full h-auto">
-        <img src="day3-pic4.jpg" alt="Enclosure build 4" loading="lazy" class="rounded-2xl shadow-sm border border-gray-200/50 w-full h-auto">
-        <img src="day3-pic5.jpg" alt="Enclosure build 5" loading="lazy" class="rounded-2xl shadow-sm border border-gray-200/50 w-full h-auto">
-    </div>
-</div>
+                        <div class="flex flex-col gap-4">
+                            <img src="day3-pic1.jpg" alt="Enclosure build 1" loading="lazy" class="rounded-2xl shadow-sm border border-gray-200/50 w-full h-auto">
+                            <img src="day3-pic2.jpg" alt="Enclosure build 2" loading="lazy" class="rounded-2xl shadow-sm border border-gray-200/50 w-full h-auto">
+                        </div>
+                        <div class="flex flex-col gap-4">
+                            <img src="day3-pic3.jpg" alt="Enclosure build 3" loading="lazy" class="rounded-2xl shadow-sm border border-gray-200/50 w-full h-auto">
+                            <img src="day3-pic4.jpg" alt="Enclosure build 4" loading="lazy" class="rounded-2xl shadow-sm border border-gray-200/50 w-full h-auto">
+                            <img src="day3-pic5.jpg" alt="Enclosure build 5" loading="lazy" class="rounded-2xl shadow-sm border border-gray-200/50 w-full h-auto">
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -298,17 +327,39 @@
         </section>
     </main>
 
-    <footer class="w-full py-10 mt-12 border-t border-gray-300/60 bg-[#e0e4e2]/50">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <div class="text-xl font-bold tracking-tighter mb-4 flex items-center justify-center gap-2">
-                VibraCoach
+    <footer class="w-full mt-20 bg-[#13428a] text-white">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-8">
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
+                <div class="md:col-span-6">
+                    <span class="text-4xl md:text-5xl font-black tracking-tighter">Vibra<span class="font-light">Coach</span></span>
+                    <p class="mt-4 max-w-sm text-white/75 leading-relaxed">
+                        A wearable that lets a coach send haptic cues to deaf and hard-of-hearing athletes.
+                    </p>
+                </div>
+
+                <div class="md:col-span-3">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-[#a9c6f5] mb-4">The team</h3>
+                    <ul class="space-y-3 font-medium">
+                        <li><a href="https://www.linkedin.com/company/kronos-space/" target="_blank" rel="noopener" class="hover:underline underline-offset-4">Kronos</a></li>
+                        <li><a href="https://www.linkedin.com/in/AggelosLadasDev/" target="_blank" rel="noopener" class="hover:underline underline-offset-4">Aggelos Ladas</a></li>
+                        <li><a href="https://www.linkedin.com/in/iliadistheo/" target="_blank" rel="noopener" class="hover:underline underline-offset-4">Theodoris Iliadis</a></li>
+                    </ul>
+                </div>
+
+                <div class="md:col-span-3">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-[#a9c6f5] mb-4">The project</h3>
+                    <ul class="space-y-3 font-medium">
+                        <li><a href="https://github.com/AggelosLadas/VibraCoach" target="_blank" rel="noopener" class="hover:underline underline-offset-4">GitHub</a></li>
+                    </ul>
+                </div>
             </div>
-            <p class="text-sm font-medium text-muted uppercase tracking-wider">
-                Developed by Aggelos Ladas & Theodoris Iliadis &bull; TEAM KRONOS
-            </p>
-            <p class="text-xs text-gray-400 mt-4">
-                &copy; 2026 VibraCoach. All rights reserved.
-            </p>
+
+            <div class="mt-12 border-t border-white/25 pt-5 flex flex-col sm:flex-row sm:justify-between gap-2 text-xs text-white/65">
+                <span>Built by Team Kronos at Οπεν Hackathon 2026</span>
+                <span>&copy; 2026 Aggelos Ladas &amp; Theodoris Iliadis</span>
+            </div>
+
         </div>
     </footer>
 
