@@ -58,9 +58,479 @@
         .iframe-container iframe {
             background-color: #ecefed;
         }
+
+        .iframe-container .vibrapod-frame {
+            border: 1px solid rgba(19, 66, 138, 0.18);
+            border-color: color-mix(in srgb, var(--accessibility-model-outline) 24%, transparent);
+            box-shadow: 0 3px 10px rgba(19, 66, 138, 0.08);
+            transition: border-color 180ms ease, box-shadow 180ms ease;
+        }
+
+        :root {
+            --accessibility-accent: #79db99;
+            --accessibility-page-bg: #ecefed;
+            --accessibility-page-text: #252729;
+            --accessibility-muted: #71767a;
+            --accessibility-link: #13428a;
+            --accessibility-model-outline: #13428a;
+        }
+
+        :root[data-color-mode="blue-amber"] {
+            --accessibility-accent: #ffc857;
+            --accessibility-page-bg: #101820;
+            --accessibility-page-text: #f1f5f8;
+            --accessibility-muted: #c1ccd4;
+            --accessibility-link: #ffc857;
+            --accessibility-model-outline: #ffc857;
+        }
+
+        :root[data-color-mode="blue-orange"] {
+            --accessibility-accent: #ffad42;
+            --accessibility-page-bg: #101820;
+            --accessibility-page-text: #f7f9fc;
+            --accessibility-muted: #c9d3df;
+            --accessibility-link: #ffad42;
+            --accessibility-model-outline: #ffad42;
+        }
+
+        :root[data-color-mode="purple-gold"] {
+            --accessibility-accent: #ffd166;
+            --accessibility-page-bg: #191329;
+            --accessibility-page-text: #f5f1ff;
+            --accessibility-muted: #d0c7e6;
+            --accessibility-link: #ffd166;
+            --accessibility-model-outline: #ffd166;
+        }
+
+        :root[data-color-mode="grayscale"] {
+            --accessibility-accent: #fff;
+            --accessibility-page-bg: #111;
+            --accessibility-page-text: #fff;
+            --accessibility-muted: #d0d0d0;
+            --accessibility-link: #fff;
+            --accessibility-model-outline: #fff;
+        }
+
+        :root[data-color-mode="high-contrast"] {
+            --accessibility-accent: #ffdf00;
+            --accessibility-page-bg: #000;
+            --accessibility-page-text: #fff;
+            --accessibility-muted: #e0e0e0;
+            --accessibility-link: #ffdf00;
+            --accessibility-model-outline: #ffdf00;
+        }
+
+        :root[data-color-mode="warm-light"] {
+            --accessibility-accent: #326b3b;
+            --accessibility-page-bg: #fff8e8;
+            --accessibility-page-text: #24211c;
+            --accessibility-muted: #554f45;
+            --accessibility-link: #326b3b;
+            --accessibility-model-outline: #554f45;
+        }
+
+        :root[data-color-mode] body {
+            background-color: var(--accessibility-page-bg);
+            color: var(--accessibility-page-text);
+        }
+
+        :root[data-color-mode] .text-ink,
+        :root[data-color-mode] .text-ink\/75,
+        :root[data-color-mode] .text-ink\/80,
+        :root[data-color-mode] .text-ink\/70 {
+            color: var(--accessibility-page-text);
+        }
+
+        :root[data-color-mode] .text-\[\#13428a\] {
+            color: var(--accessibility-link);
+        }
+
+        :root[data-color-mode] .bg-brandbg,
+        :root[data-color-mode] .iframe-container iframe {
+            background-color: var(--accessibility-page-bg);
+        }
+
+        :root[data-color-mode="blue-amber"],
+        :root[data-color-mode="blue-orange"],
+        :root[data-color-mode="purple-gold"],
+        :root[data-color-mode="grayscale"],
+        :root[data-color-mode="high-contrast"] {
+            color-scheme: dark;
+        }
+
+        :root[data-color-mode="warm-light"] {
+            color-scheme: light;
+        }
+
+        :root[data-color-mode="blue-amber"] #kronosLogo,
+        :root[data-color-mode="blue-orange"] #kronosLogo,
+        :root[data-color-mode="purple-gold"] #kronosLogo,
+        :root[data-color-mode="grayscale"] #kronosLogo,
+        :root[data-color-mode="high-contrast"] #kronosLogo {
+            mix-blend-mode: normal;
+            border-radius: 1.25rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.24);
+        }
+
+        html.extra-spacing body,
+        html.extra-spacing main p,
+        html.extra-spacing footer p {
+            line-height: 1.9;
+        }
+
+        html.dyslexia-friendly,
+        html.dyslexia-friendly * {
+            font-family: Arial, Verdana, sans-serif !important;
+            letter-spacing: 0.025em;
+            word-spacing: 0.08em;
+        }
+
+        html.emphasize-links a {
+            text-decoration: underline !important;
+            text-decoration-thickness: 0.12em !important;
+            text-underline-offset: 0.18em !important;
+        }
+
+        html.highlight-headings main h1,
+        html.highlight-headings main h2,
+        html.highlight-headings main h3 {
+            text-decoration: underline;
+            text-decoration-color: var(--accessibility-accent);
+            text-decoration-thickness: 0.12em;
+            text-underline-offset: 0.18em;
+        }
+
+        .accessibility-tools {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 100;
+            color: #252729;
+            color-scheme: light;
+            font-size: 15px;
+        }
+
+        .accessibility-tools summary {
+            list-style: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #13428a;
+            background: #fff;
+            border: 2px solid #13428a;
+            border-radius: 8px;
+            padding: 0.65rem 0.85rem;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(19, 66, 138, 0.18);
+            transition: background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+        }
+
+        .accessibility-tools summary::after {
+            content: "";
+            flex: 0 0 auto;
+            width: 0.5rem;
+            height: 0.5rem;
+            border-right: 2px solid currentColor;
+            border-bottom: 2px solid currentColor;
+            transform: translateY(-0.12rem) rotate(45deg);
+            transition: transform 160ms ease;
+        }
+
+        .accessibility-tools[open] summary::after {
+            transform: translateY(0.12rem) rotate(225deg);
+        }
+
+        .accessibility-tools summary:hover {
+            background: #eef4fb;
+            border-color: #0e3270;
+            box-shadow: 0 5px 14px rgba(19, 66, 138, 0.24);
+        }
+
+        .accessibility-tools summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .accessibility-panel {
+            width: min(380px, calc(100vw - 2rem));
+            max-height: calc(100vh - 5rem);
+            max-height: calc(100dvh - 5rem);
+            overflow-y: auto;
+            margin-top: 0.5rem;
+            padding: 1rem;
+            color: #252729;
+            background: #f8fafc;
+            border: 1px solid #d5dfe8;
+            border-radius: 16px;
+            box-shadow: 0 12px 32px rgba(19, 66, 138, 0.2);
+        }
+
+        .accessibility-panel h2,
+        .accessibility-status,
+        .accessibility-control.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .accessibility-panel h2 {
+            margin-bottom: 5px;
+            color: #13428a;
+            font-size: 1.1em;
+        }
+
+        .accessibility-control {
+            display: grid;
+            min-width: 0;
+            gap: 5px;
+            margin-top: 9px;
+            padding-top: 9px;
+            border-top: 1px solid #dce4eb;
+        }
+
+        .accessibility-control label {
+            font-weight: 600;
+        }
+
+        .accessibility-control .checkbox-option {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .accessibility-control input[type="checkbox"] {
+            flex: 0 0 auto;
+            width: 19px;
+            height: 19px;
+            accent-color: var(--accessibility-accent);
+        }
+
+        .accessibility-panel button,
+        .accessibility-panel select {
+            min-height: 44px;
+            padding: 8px 10px;
+            border: 1px solid #c6d2df;
+            border-radius: 8px;
+            background: #fff;
+            color: #252729;
+            font: inherit;
+        }
+
+        .accessibility-panel select {
+            width: 100%;
+            min-width: 0;
+            padding-right: 2.5rem;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='m4 6 4 4 4-4' stroke='%2313428a' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.8rem center;
+            background-size: 1rem;
+        }
+
+        .accessibility-panel select option {
+            color: #252729;
+            background: #fff;
+        }
+
+        .accessibility-panel button {
+            width: 100%;
+            cursor: pointer;
+            border-color: #13428a;
+            background: #13428a;
+            color: #fff;
+            font-weight: 600;
+            transition: background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+        }
+
+        .accessibility-panel button:hover:not(:disabled) {
+            border-color: #0e3270;
+            background: #0e3270;
+            box-shadow: 0 2px 8px rgba(19, 66, 138, 0.18);
+        }
+
+        .accessibility-panel select:hover {
+            border-color: var(--accessibility-accent);
+        }
+
+        .accessibility-panel button:focus-visible,
+        .accessibility-panel select:focus-visible {
+            border-color: #13428a;
+            outline-color: var(--accessibility-accent);
+        }
+
+        .accessibility-panel button:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .accessibility-actions {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.5rem;
+        }
+
+        .accessibility-actions button {
+            padding-inline: 0.35rem;
+        }
+
+        .accessibility-status {
+            min-height: 1.5em;
+            margin-top: 8px;
+            color: var(--accessibility-muted);
+            font-size: 0.85rem;
+        }
+
+        .accessibility-tools :focus-visible {
+            outline: 3px solid var(--accessibility-accent);
+            outline-offset: 3px;
+        }
+
+        .accessibility-tools summary:focus-visible {
+            outline-color: #13428a;
+        }
+
+        html.reduce-motion,
+        html.reduce-motion * {
+            scroll-behavior: auto !important;
+            animation: none !important;
+            transition: none !important;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html:not(.motion-overridden),
+            html:not(.motion-overridden) * {
+                scroll-behavior: auto !important;
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .accessibility-tools {
+                top: max(0.5rem, env(safe-area-inset-top));
+                right: max(0.5rem, env(safe-area-inset-right));
+            }
+
+            .accessibility-tools summary {
+                gap: 0.65rem;
+                max-width: calc(100vw - 1rem);
+                padding: 0.55rem 0.7rem;
+                font-size: 0.9rem;
+            }
+
+            .accessibility-panel {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr);
+                gap: 0;
+                width: min(380px, calc(100vw - 1rem));
+                max-height: calc(100vh - 4.5rem);
+                max-height: calc(100dvh - 4.5rem);
+                padding: 12px;
+            }
+
+            .accessibility-control {
+                gap: 4px;
+                margin-top: 6px;
+                padding-top: 6px;
+            }
+
+            .accessibility-actions {
+                grid-template-columns: minmax(0, 1fr);
+                gap: 0.4rem;
+            }
+
+            .accessibility-actions button {
+                min-height: 2.75rem;
+                padding: 0.5rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-height: 560px) {
+            .accessibility-tools {
+                top: 0.35rem;
+                right: 0.35rem;
+            }
+
+            .accessibility-panel {
+                padding: 9px;
+            }
+
+            .accessibility-control {
+                gap: 3px;
+                margin-top: 4px;
+                padding-top: 4px;
+            }
+
+            .accessibility-control input[type="checkbox"] {
+                width: 17px;
+                height: 17px;
+            }
+
+            .accessibility-panel button,
+            .accessibility-panel select {
+                min-height: 38px;
+                padding: 5px;
+            }
+        }
     </style>
 </head>
 <body class="bg-brandbg text-ink font-sans antialiased overflow-x-hidden">
+
+    <details class="accessibility-tools">
+        <summary>Accessibility options</summary>
+        <div class="accessibility-panel">
+            <h2>Accessibility options</h2>
+            <div class="accessibility-control full-width">
+                <label for="colorModeSelect">Color mode</label>
+                <select id="colorModeSelect">
+                    <option value="default">Default</option>
+                    <option value="blue-amber">Blue and amber</option>
+                    <option value="blue-orange">Blue and orange</option>
+                    <option value="purple-gold">Purple and gold</option>
+                    <option value="grayscale">Grayscale</option>
+                    <option value="high-contrast">High contrast</option>
+                    <option value="warm-light">Warm light</option>
+                </select>
+            </div>
+            <div class="accessibility-control full-width">
+                <label for="textScaleSelect">Text size</label>
+                <select id="textScaleSelect">
+                    <option value="100">Default (100%)</option>
+                    <option value="125">Large (125%)</option>
+                    <option value="150">Larger (150%)</option>
+                    <option value="175">Extra large (175%)</option>
+                    <option value="200">Maximum (200%)</option>
+                </select>
+            </div>
+            <div class="accessibility-control">
+                <label class="checkbox-option"><input id="reduceMotionToggle" type="checkbox"> Reduce motion</label>
+            </div>
+            <div class="accessibility-control">
+                <label class="checkbox-option"><input id="extraSpacingToggle" type="checkbox"> More line spacing</label>
+            </div>
+            <div class="accessibility-control">
+                <label class="checkbox-option"><input id="dyslexiaFontToggle" type="checkbox"> Simple font and spacing</label>
+            </div>
+            <div class="accessibility-control">
+                <label class="checkbox-option"><input id="emphasizeLinksToggle" type="checkbox"> Underline all links</label>
+            </div>
+            <div class="accessibility-control">
+                <label class="checkbox-option"><input id="highlightHeadingsToggle" type="checkbox"> Highlight headings</label>
+            </div>
+            <div class="accessibility-control full-width">
+                <button id="vibraPodRotationButton" type="button" aria-pressed="false">Stop VibraPod rotation</button>
+            </div>
+            <div class="accessibility-control full-width">
+                <span>Read page aloud (browser voice)</span>
+                <div class="accessibility-actions">
+                    <button id="readPageButton" type="button">Read page</button>
+                    <button id="pauseReadingButton" type="button" disabled>Pause</button>
+                    <button id="stopReadingButton" type="button" disabled>Stop reading</button>
+                </div>
+            </div>
+            <p class="accessibility-status" id="accessibilityStatus" aria-live="polite"></p>
+        </div>
+    </details>
 
     <nav class="w-full bg-[#13428a] text-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
@@ -101,7 +571,7 @@
             </div>
 
             <div class="mt-16 flex flex-col lg:flex-row items-center justify-center gap-10 lg:gap-14">
-                <img src="kronos-logo.png" alt="Team Kronos" class="h-32 md:h-40 lg:h-44 w-auto object-contain mix-blend-multiply">
+                <img id="kronosLogo" src="kronos-logo.png" alt="Team Kronos" class="h-32 md:h-40 lg:h-44 w-auto object-contain mix-blend-multiply">
 
                 <div class="hidden lg:block h-28 w-px bg-ink/20"></div>
 
@@ -302,7 +772,7 @@
             <div class="max-w-[1400px] mx-auto px-2 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-4 iframe-container">
                 <div class="flex flex-col items-center">
                     <h3 class="text-2xl md:text-3xl font-semibold tracking-tight mb-6">VibraPod</h3>
-                    <div class="w-full h-[600px] bg-brandbg rounded-3xl shadow-inner border border-white/40">
+                    <div class="vibrapod-frame w-full h-[600px] bg-brandbg rounded-3xl shadow-inner">
                         <iframe 
                             src="VibraPod.html" 
                             title="Vibra Pod 3D Viewer" 
@@ -315,7 +785,7 @@
                 
                 <div class="flex flex-col items-center">
                     <h3 class="text-2xl md:text-3xl font-semibold tracking-tight mb-6">VibraPod Inside</h3>
-                    <div class="w-full h-[600px] bg-brandbg rounded-3xl shadow-inner border border-white/40">
+                    <div class="vibrapod-frame w-full h-[600px] bg-brandbg rounded-3xl shadow-inner">
                         <iframe 
                             src="VibraPod_Transparent.html" 
                             title="Vibra Pod Transparent Viewer" 
@@ -364,6 +834,187 @@
 
         </div>
     </footer>
+
+    <script>
+        const accessibilityStatus = document.getElementById('accessibilityStatus');
+        const readPageButton = document.getElementById('readPageButton');
+        const pauseReadingButton = document.getElementById('pauseReadingButton');
+        const stopReadingButton = document.getElementById('stopReadingButton');
+        const root = document.documentElement;
+        const kronosLogo = document.getElementById('kronosLogo');
+        const vibraPodRotationButton = document.getElementById('vibraPodRotationButton');
+        const darkColorModes = ['blue-amber', 'blue-orange', 'purple-gold', 'grayscale', 'high-contrast'];
+        let pageNarration = null;
+        let vibraPodRotationPaused = false;
+
+        const updateKronosLogo = function (colorMode) {
+            kronosLogo.src = darkColorModes.includes(colorMode)
+                ? 'kronos-logo_dark.png'
+                : 'kronos-logo.png';
+        };
+
+        const syncViewerTheme = function () {
+            const theme = {
+                type: 'vibracoach-theme',
+                background: getComputedStyle(root).getPropertyValue('--accessibility-page-bg').trim(),
+                text: getComputedStyle(root).getPropertyValue('--accessibility-page-text').trim()
+            };
+            document.querySelectorAll('.iframe-container iframe').forEach(function (frame) {
+                frame.contentWindow?.postMessage(theme, '*');
+                frame.contentWindow?.postMessage({
+                    type: 'vibracoach-animation',
+                    paused: vibraPodRotationPaused
+                }, '*');
+            });
+        };
+
+        document.querySelectorAll('.iframe-container iframe').forEach(function (frame) {
+            frame.addEventListener('load', syncViewerTheme);
+        });
+
+        vibraPodRotationButton.addEventListener('click', function () {
+            vibraPodRotationPaused = !vibraPodRotationPaused;
+            vibraPodRotationButton.setAttribute('aria-pressed', String(vibraPodRotationPaused));
+            vibraPodRotationButton.textContent = vibraPodRotationPaused
+                ? 'Resume VibraPod rotation'
+                : 'Stop VibraPod rotation';
+            syncViewerTheme();
+            accessibilityStatus.textContent = vibraPodRotationPaused
+                ? 'Automatic VibraPod rotation stopped. You can still rotate the models manually.'
+                : 'Automatic VibraPod rotation resumed.';
+        });
+
+        document.getElementById('colorModeSelect').addEventListener('change', function () {
+            if (this.value === 'default') {
+                root.removeAttribute('data-color-mode');
+            } else {
+                root.dataset.colorMode = this.value;
+            }
+            updateKronosLogo(this.value);
+            syncViewerTheme();
+        });
+
+        document.getElementById('textScaleSelect').addEventListener('change', function () {
+            root.style.fontSize = this.value === '100' ? '' : this.value + '%';
+        });
+
+        const reduceMotionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const reduceMotionToggle = document.getElementById('reduceMotionToggle');
+        let reduceMotionUserChoice = false;
+        reduceMotionToggle.checked = reduceMotionPreference.matches;
+        root.classList.toggle('reduce-motion', reduceMotionPreference.matches);
+
+        reduceMotionToggle.addEventListener('change', function () {
+            reduceMotionUserChoice = true;
+            root.classList.add('motion-overridden');
+            root.classList.toggle('reduce-motion', this.checked);
+        });
+
+        const handleMotionPreferenceChange = function (event) {
+            if (reduceMotionUserChoice) return;
+            reduceMotionToggle.checked = event.matches;
+            root.classList.toggle('reduce-motion', event.matches);
+        };
+
+        if (typeof reduceMotionPreference.addEventListener === 'function') {
+            reduceMotionPreference.addEventListener('change', handleMotionPreferenceChange);
+        } else if (typeof reduceMotionPreference.addListener === 'function') {
+            reduceMotionPreference.addListener(handleMotionPreferenceChange);
+        }
+
+        document.getElementById('extraSpacingToggle').addEventListener('change', function () {
+            root.classList.toggle('extra-spacing', this.checked);
+        });
+
+        document.getElementById('dyslexiaFontToggle').addEventListener('change', function () {
+            root.classList.toggle('dyslexia-friendly', this.checked);
+        });
+
+        document.getElementById('emphasizeLinksToggle').addEventListener('change', function () {
+            root.classList.toggle('emphasize-links', this.checked);
+        });
+
+        document.getElementById('highlightHeadingsToggle').addEventListener('change', function () {
+            root.classList.toggle('highlight-headings', this.checked);
+        });
+
+        const speechIsSupported = 'speechSynthesis' in window
+            && 'SpeechSynthesisUtterance' in window;
+
+        readPageButton.addEventListener('click', function () {
+            if (!speechIsSupported) {
+                accessibilityStatus.textContent = 'Read aloud is not supported by this browser.';
+                return;
+            }
+
+            if (pageNarration) {
+                pageNarration.onend = null;
+                pageNarration.onerror = null;
+            }
+            window.speechSynthesis.cancel();
+            readPageButton.disabled = true;
+            pauseReadingButton.disabled = false;
+            pauseReadingButton.textContent = 'Pause';
+            stopReadingButton.disabled = false;
+            accessibilityStatus.textContent = 'Starting read aloud.';
+
+            pageNarration = new SpeechSynthesisUtterance(document.querySelector('main').innerText);
+            pageNarration.lang = root.lang || 'en';
+            pageNarration.onstart = function () {
+                accessibilityStatus.textContent = 'Reading page aloud.';
+            };
+            pageNarration.onend = function () {
+                readPageButton.disabled = false;
+                pauseReadingButton.disabled = true;
+                pauseReadingButton.textContent = 'Pause';
+                stopReadingButton.disabled = true;
+                accessibilityStatus.textContent = 'Finished reading the page.';
+                pageNarration = null;
+            };
+            pageNarration.onerror = function () {
+                readPageButton.disabled = false;
+                pauseReadingButton.disabled = true;
+                pauseReadingButton.textContent = 'Pause';
+                stopReadingButton.disabled = true;
+                accessibilityStatus.textContent = 'The browser could not read the page aloud.';
+                pageNarration = null;
+            };
+            window.speechSynthesis.speak(pageNarration);
+        });
+
+        pauseReadingButton.addEventListener('click', function () {
+            if (!pageNarration) return;
+
+            if (window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
+                pauseReadingButton.textContent = 'Pause';
+                accessibilityStatus.textContent = 'Reading resumed.';
+            } else {
+                window.speechSynthesis.pause();
+                pauseReadingButton.textContent = 'Resume';
+                accessibilityStatus.textContent = 'Reading paused.';
+            }
+        });
+
+        stopReadingButton.addEventListener('click', function () {
+            if (pageNarration) {
+                pageNarration.onend = null;
+                pageNarration.onerror = null;
+            }
+            if (speechIsSupported) window.speechSynthesis.cancel();
+            pageNarration = null;
+            readPageButton.disabled = false;
+            pauseReadingButton.disabled = true;
+            pauseReadingButton.textContent = 'Pause';
+            stopReadingButton.disabled = true;
+            accessibilityStatus.textContent = 'Reading stopped.';
+        });
+
+        if (!speechIsSupported) {
+            readPageButton.disabled = true;
+            accessibilityStatus.textContent = 'Read aloud is not supported by this browser.';
+        }
+    </script>
 
 </body>
 </html>
